@@ -1,39 +1,166 @@
 <!DOCTYPE html>
-<html >
-<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>ML API</title>
-  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  
+  <title>Medical insurance Prediction</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    
+    .navbar.navbar-inverse .navbar-header .navbar-brand {
+    display: inline-block;
+    text-align:center;
+    float: none;
+    vertical-align: top;
+  }
+    
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 295px;}
+    .column{
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 100px; /* Should be removed. Only for demonstration */
+}
+body{ 
+  min-height: 100%;
+   background-image: url("https://images.unsplash.com/photo-1601578277952-85c972179729?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4fHx8ZW58MHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60");
+   background-size: cover;
+   background-repeat: no-repeat;
+   background-position: center center;
+}
+#ip{
+  width: 400px;
+  height: 50px
+}
+label{
+  text-align: left;
+}
+
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.form-group{
+  padding: 5px;
+}
+select{
+  min-height: 40px;
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+  .row.content {height:auto;} 
+}
+#result{
+  padding-top: 20px;
+    padding-bottom: 10px;
+	font-size: 25px;
+	color: black;
+}
+
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #000000;
+      color: white;
+      padding: 20px;
+      margin-top: 30px;
+    }
+    
+    
+  </style>
 </head>
 
-<body>
- <div class="login">
-	<h1>Insurance Prediction</h1>
+<header>
+<nav class="navbar navbar-inverse">
+  <div class="container text-center">
+      <div class="navbar-header  col-md-12">
+        <a class="navbar-brand text-center" style="color: white">Medical Insurance Prediction</a>
+      </div>
+  </div>
+</nav>
+</header>
+ <form action="{{ url_for('predict')}}"method="post">
+<body class="d-flex flex-column">
+<div class="login">
+<div class="flex-grow-1 flex-shrink-0">
+ <div class="container text-center" id="form-body">   
+ <div class="row content">
+<!--   <div class="column">  -->
+    <form action="#result">
 
-     <!-- Main Input For Receiving Query to our ML -->
-    <form action="{{ url_for('predict')}}"method="post">
-      <input type="text" name="age" placeholder="Age" required="required" /><br>
-    	<input type="text" name="bmi" placeholder="Body mass index(BMI)" required="required" /><br>
-        <input type="text" name="children" placeholder="Children [0,1,2,3,4,5]" required="required" /><br>
-        <input type="text" name="smoker" placeholder="Smoker [0,1]" required="required" /><br>
+		<div class="form-group" style= "margin-top:50px">
+        <label >
+        <input type="text" class="form-control" id="ip" name ="Age" placeholder="Age" required="required" ></label>
+      </div>
+      	   <div class="form-group">
+        <label >
+          <input type="text" class="form-control" id="ip" name ="bmi" 
+          placeholder="Body mass index(BMI)"  required="required">
+          </label>
+      </div>
 
-       
-
-        <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
-    </form>
-
-   <br>
-   <br>
+	  <div class="form-group">
+        <label for="children">
+        <select class="form-control input100"  id="ip" name="children" 
+        style="padding: 10px 5px;margin-top,margin-bottom: 15px;
+        border: 2px solid #d9d9d9;"
+        required="required" >
+    <option value="" disabled selected hidden>Select Number of Children</option>
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        </select>
+        </label>
+      </div>
+	  <div class="form-group">
+        <label for="smoker">
+        <!--<input type="text" class="form-control" id="ip" name ="Gender" placeholder="Gender of the flight of passengers" required="required">-->
+        <select class="form-control input100"  id="ip" name="smoker" 
+          style="padding: 10px 5px;margin-top,margin-bottom: 15px;
+          border: 2px solid #d9d9d9;" required="required" >  
+        <option value="" disabled selected hidden>Select Smoker or Not </option>
+    <option value="0">I'm Smoker</option>
+    <option value="1">I'm not a Smoker</option>
+        </select>
+      </label>
+      </div>
+	      </div>
   
-   
- </div>
- {{prediction_text}}
+</div>
+<div class="container text-center" id="submit" style= "margin-top:100px">
+      <button type="submit" class="btn btn-default" onsubmit="#result" style="margin-top: 100px;">Predict</button>
+    <div class="container col-md-12 text-center" id="result" style="margin-bottom: 0px"> <b>{{prediction_text}}</b>
+	<b id="result"></b>
+     </div>
+</div>
+	 </form>
+</div>   
+   </div>
+</div>
+  </div>
+</div>
+</div>
 
 </body>
+ </form>
+  <footer class="py-4 bg-dark flex-shrink-0">
+    <div class="container text-center">
+      <b class="text" style="color: white">Designed by Sasi Chandra</b>
+    </div>
+  </footer>
 </html>
